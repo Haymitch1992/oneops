@@ -1,5 +1,8 @@
 {
-    "init": true,
-    "getIP": [],
-    "getApp": []
+    "status": {
+        "code": 2
+    },
+    "process": {
+        "success": false
+    }
 }

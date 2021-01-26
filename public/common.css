@@ -1,18 +1,5 @@
-* {
-    outline: none;
-}
-
 body {
     font-family: 'Microsoft Yahei', STHeiti, sans-serif, Arial;
-}
-
-input:-webkit-autofill {
-    box-shadow: 0 0 0px 1000px transparent inset !important;
-}
-
-#app {
-    width: 100%;
-    height: 100%;
 }
 
 /* form */
