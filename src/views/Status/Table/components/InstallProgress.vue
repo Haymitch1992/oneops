@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="700px" @click:outside="$emit('closeDialog')">
+  <v-dialog v-model="dialog" max-width="700px" @click:outside="close">
     <v-stepper alt-labels>
       <v-stepper-header>
         <v-stepper-step step="3" complete>
@@ -31,6 +31,20 @@ export default Vue.extend({
   data: () => {
     return {
       dialog: true
+    }
+  },
+  model: {
+    prop: 'checked',
+    event: 'closeDialog'
+  },
+  props: {
+    checked: {
+      type: Boolean
+    }
+  },
+  methods: {
+    close() {
+      this.$emit('closeDialog')
     }
   }
 })

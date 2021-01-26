@@ -117,7 +117,7 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="$emit('start-install')">
+              <v-btn text color="primary" @click="startInstall">
                 开始安装
               </v-btn>
               <v-btn text @click="e1 = 2">
@@ -136,6 +136,15 @@ import Vue from 'vue'
 
 export default Vue.extend({
   name: 'InstallApp',
+  model: {
+    prop: 'checked',
+    event: 'closeDialog'
+  },
+  props: {
+    checked: {
+      type: Boolean
+    }
+  },
   data: () => {
     return {
       e1: 1,
@@ -149,7 +158,11 @@ export default Vue.extend({
   },
   methods: {
     close() {
-      console.log(1)
+      this.$emit('closeDialog')
+    },
+    startInstall() {
+      this.$emit('closeDialog')
+      this.$emit('start-install')
     }
   }
 })

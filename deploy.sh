@@ -1,3 +1,3 @@
 git add -A
-git commit -m 'frame'
+git commit -m 'v-model'
 git push origin master

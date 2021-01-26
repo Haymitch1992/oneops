@@ -9,27 +9,15 @@
         未安装 已安装
       </v-tab-item>
     </v-tabs-items>
-    <InstallApp
-      v-if="InstallAppShow"
-      v-model="InstallAppShow"
-      @closeDialog="InstallAppShow = false"
-      @start-install="
-        InstallAppShow = false
-        InstallProgressShow = true
-      "
-    />
-    <InstallProgress
-      v-if="InstallProgressShow"
-      v-model="InstallProgressShow"
-      @closeDialog="InstallProgressShow = false"
-    />
+    <InstallApp v-if="InstallAppShow" v-model="InstallAppShow" @start-install="InstallProgressShow = true" />
+    <InstallProgress v-if="InstallProgressShow" v-model="InstallProgressShow" />
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import InstallApp from './components/InstallApp.vue'
-import InstallProgress from './components/InstallPro.vue'
+import InstallProgress from './components/InstallProgress.vue'
 
 export default Vue.extend({
   name: 'Table',
