@@ -10,10 +10,6 @@ export default Vue.extend({
   name: 'App',
   components: {
     Home
-  },
-
-  data: () => ({
-    //
-  })
+  }
 })
 </script>

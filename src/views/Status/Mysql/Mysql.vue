@@ -81,6 +81,7 @@ export default Vue.extend({
       // this.timer = setTimeout(() => {
       //   this.success = true
       // }, 45000)
+      // 2ip
     }
   }
 })

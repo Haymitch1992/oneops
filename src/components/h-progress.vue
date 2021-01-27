@@ -5,34 +5,17 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Component, Vue, Prop } from 'vue-property-decorator'
+@Component
+export default class Progress extends Vue {
+  @Prop({ default: 90 }) errortime!: number
+  @Prop({ default: 3 }) threshold!: number
+  @Prop({ default: false }) success!: boolean
 
-export default Vue.extend({
-  name: 'Progress',
-  props: {
-    // 超时时间
-    errortime: {
-      type: Number,
-      default: 90
-    },
-    // 临界值，进度条
-    threshold: {
-      type: Number,
-      default: 3
-    },
-    // 轮询结果
-    success: {
-      type: Boolean,
-      default: false
-    }
-  },
-  data: () => {
-    return {
-      knowledge: 0,
-      timer: 0,
-      n: 0
-    }
-  },
+  knowledge = 0
+  timer = 0
+  n = 0
+
   mounted() {
     this.timer = setInterval(() => {
       // 轮询结果判断
@@ -59,5 +42,5 @@ export default Vue.extend({
       }
     }, 500)
   }
-})
+}
 </script>

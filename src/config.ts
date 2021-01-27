@@ -8,3 +8,5 @@
 // 106
 // VUE_APP_BASE_API = 'http://172.51.216.106:9002'
 export const VUE_APP_BASE_API = 'http://localhost:3001'
+
+export const PROJECT_TITLE = '非容器化部署平台'
