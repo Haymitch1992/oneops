@@ -11,6 +11,17 @@
         clearable
         height="34"
         :label="index === 0 ? '本机IP' : 'IP'"
+        :rules="noEmpty(index === 0 ? '本机IP' : 'IP')"
+        class="ml-4"
+      ></v-text-field>
+      <v-text-field
+        v-model="item.netWorkCard"
+        outlined
+        dense
+        clearable
+        height="34"
+        label="网卡信息"
+        :rules="noEmpty('网卡信息')"
         class="ml-4"
       ></v-text-field>
       <v-text-field
@@ -20,6 +31,7 @@
         clearable
         height="34"
         label="用户名"
+        :rules="noEmpty('用户名')"
         class="ml-4"
       ></v-text-field>
       <v-text-field
@@ -31,8 +43,10 @@
         dense
         height="34"
         label="密码"
+        :rules="noEmpty('密码')"
         class="ml-4 mr-2"
       ></v-text-field>
+
       <div class="btn-group d-flex justify-space-around mr-6">
         <v-btn
           v-if="index !== 0 && index !== 1 && index === formProvide.length - 1"
@@ -66,6 +80,7 @@
 <script lang="ts">
 import { Vue, Inject, Component } from 'vue-property-decorator'
 import { resourcePlanItemsType } from '@/type/yum.type'
+import { noEmpty } from '@/validator/common'
 
 @Component
 export default class Resource extends Vue {
@@ -73,8 +88,11 @@ export default class Resource extends Vue {
   plus(n?: number) {
     n = n ? n : 1
     for (let i = 0; i < n; i++) {
-      this.formProvide.push({ ip: '', userName: '', passWord: '', showPass: false })
+      this.formProvide.push({ ip: '', userName: '', passWord: '', netWorkCard: '', showPass: false })
     }
+  }
+  noEmpty(str: string) {
+    return noEmpty(str)
   }
   minus(index: number) {
     this.formProvide.splice(index, 1)

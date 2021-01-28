@@ -1,3 +1,3 @@
 git add -A
-git commit -m '添加骨架屏'
+git commit -m 'axios'
 git push origin master

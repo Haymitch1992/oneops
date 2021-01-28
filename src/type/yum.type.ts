@@ -3,4 +3,5 @@ export type resourcePlanItemsType = {
   userName: string
   passWord: string
   showPass: boolean
+  netWorkCard: string
 }

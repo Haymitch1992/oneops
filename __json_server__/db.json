@@ -1,4 +1,10 @@
 {
+    "init": {
+        "code": 0
+    },
+    "level": {
+        "code": 0
+    },
     "status": {
         "code": 0
     },

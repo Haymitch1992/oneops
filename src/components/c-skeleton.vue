@@ -1,6 +1,6 @@
 <template>
   <div id="skeleton">
-    <h1 class="skeleton-title mt-12">{{ PROJECT_TITLE }}</h1>
+    <!-- <h1 class="skeleton-title mt-12">{{ PROJECT_TITLE }}</h1> -->
     <v-row class="skeleton-container" no-gutters>
       <v-col cols="12">
         <v-skeleton-loader
@@ -13,7 +13,7 @@
           v-for="item in 8"
           :key="item"
           v-bind="attrs"
-          height="40px"
+          height="35px"
           class="my-8"
           type="image"
         ></v-skeleton-loader>
@@ -26,7 +26,7 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { PROJECT_TITLE } from '@/config'
 @Component
-export default class Skeleton extends Vue {
+export default class CSkeleton extends Vue {
   attrs = {
     boilerplate: true,
     elevation: 0
@@ -43,7 +43,7 @@ export default class Skeleton extends Vue {
   background-color: rgba(33, 33, 33, 0.3);
 }
 .skeleton-title {
-  font-size: 45px;
+  font-size: 40px;
   font-weight: 600;
   letter-spacing: 10px;
   text-align: center;
@@ -51,6 +51,6 @@ export default class Skeleton extends Vue {
 }
 .skeleton-container {
   width: 1300px;
-  margin: 50px auto 0 auto;
+  margin: 100px auto 0 auto;
 }
 </style>

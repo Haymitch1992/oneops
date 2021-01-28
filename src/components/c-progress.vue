@@ -7,7 +7,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator'
 @Component
-export default class Progress extends Vue {
+export default class CProgress extends Vue {
   @Prop({ default: 90 }) errortime!: number
   @Prop({ default: 3 }) threshold!: number
   @Prop({ default: false }) success!: boolean
@@ -32,13 +32,14 @@ export default class Progress extends Vue {
       } else {
         this.knowledge = 100
         clearInterval(this.timer)
-        alert('安装成功')
+        // alert('安装成功')
+        this.$emit('finished')
       }
 
       // 超过时间范围，认为安装失败
       if (this.n > this.errortime) {
         clearInterval(this.timer)
-        alert('安装失败')
+        // alert('安装失败')
       }
     }, 500)
   }

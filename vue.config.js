@@ -3,8 +3,17 @@ module.exports = {
   devServer: {
     port: 8080,
     open: true
+    // proxy: {
+    //   'api/': {
+    //     target: 'http://192.168.58.120:8080',
+    //     changeOrigin: true,
+    //     pathRewrite: {
+    //       '^api/': '/'
+    //     }
+    //   }
+    // }
   },
-  transpileDependencies: ['vuetify'],
+  transpileDependencies: ['vuetify', 'vuex-module-decorators'],
   configureWebpack: config => {
     if (process.env.NODE_ENV === 'production') {
       config.optimization.minimizer[0].options.terserOptions = {

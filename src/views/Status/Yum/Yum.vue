@@ -1,30 +1,33 @@
 <template>
   <div>
-    <Skeleton />
-    <!-- <h1 id="YumTitle">初始化安装yum</h1> -->
+    <CSkeleton />
     <v-stepper id="Yum" non-linear v-model="e1">
       <v-stepper-header>
         <v-stepper-step editable step="1">
           资源规划
         </v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step editable step="2">
-          选择安装yum源的IP
-        </v-stepper-step>
-        <v-divider></v-divider>
-        <v-stepper-step editable step="3">
+        <v-stepper-step :editable="resourcePlan && progressShowYum" step="2">
           安装yum
         </v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step editable step="4">
+        <v-stepper-step :editable="resourcePlan && progressShowSsh" step="3">
           打通ssh
+        </v-stepper-step>
+        <v-divider></v-divider>
+        <v-stepper-step :editable="resourcePlan && progressShowMysqlIp" step="4">
+          选择安装MySQL的IP
+        </v-stepper-step>
+        <v-divider></v-divider>
+        <v-stepper-step :editable="resourcePlan && progressShowMysql" step="5">
+          安装MySQL
         </v-stepper-step>
       </v-stepper-header>
 
       <v-stepper-items>
         <v-stepper-content class="px-0" step="1">
           <v-card flat>
-            <p class="text-suggest"><span class="require-span">*</span>建议使用本机IP作为安装yum以及应用的IP</p>
+            <p class="text-suggest mb-0"><span class="require-span">*</span>将使用本机IP作为安装yum以及应用的IP</p>
             <v-card-text class="pb-0 px-0 mt-4">
               <v-form v-model="resourcePlan">
                 <Resource />
@@ -32,8 +35,15 @@
             </v-card-text>
             <v-card-actions class="pt-0 mr-6">
               <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="e1 = 2">
-                下一步
+              <v-btn
+                text
+                color="primary"
+                :disabled="
+                  !resourcePlan || progressShowYum || progressShowSsh || progressShowMysql || progressShowMysqlIp
+                "
+                @click="startInstallYum"
+              >
+                开始初始化安装
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -41,46 +51,40 @@
 
         <v-stepper-content step="2">
           <v-card flat>
-            <v-card-text v-if="resourcePlanItems[0].ip" class="pb-0 mt-4">
-              <v-form>
-                <v-row no-gutters>
-                  <v-col cols="12" class="d-flex justify-space-around">
-                    <v-radio-group v-model="radioGroupYum" row>
-                      <v-radio
-                        v-for="(item, index) in resourcePlanItems"
-                        :key="item.id"
-                        :label="item.ip + (index === 0 ? `（本机IP）` : '')"
-                        :value="index"
-                      ></v-radio>
-                    </v-radio-group>
-                  </v-col>
-                </v-row>
-              </v-form>
+            <v-card-text class="my-6">
+              <CProgress v-if="progressShowYum" :success="successYum" />
             </v-card-text>
-            <v-card-actions class="pt-0 mr-2">
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" :disabled="!resourcePlan" @click="startInstall">
-                开始安装yum
-              </v-btn>
-              <v-btn text @click="e1 = 1">
-                上一步
-              </v-btn>
-            </v-card-actions>
           </v-card>
         </v-stepper-content>
 
         <v-stepper-content step="3">
           <v-card flat>
             <v-card-text class="my-6">
-              <Progress v-if="progressShowYum" :success="success" />
+              <CProgress v-if="progressShowSsh" :success="successSsh" />
             </v-card-text>
           </v-card>
         </v-stepper-content>
 
         <v-stepper-content step="4">
           <v-card flat>
+            <v-card-text class="pb-0">
+              <v-form v-model="mysqlPlan">
+                <Mysql />
+              </v-form>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn text color="primary" :disabled="!mysqlPlan || progressShowMysql" @click="startInstallMysql">
+                开始安装Mysql
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-stepper-content>
+
+        <v-stepper-content step="5">
+          <v-card flat>
             <v-card-text class="my-6">
-              <Progress v-if="progressShowSsh" :success="success" />
+              <CProgress v-if="progressShowMysql" :success="successMysql" @finished="finishInit" />
             </v-card-text>
           </v-card>
         </v-stepper-content>
@@ -91,53 +95,102 @@
 
 <script lang="ts">
 import { Component, Vue, Provide } from 'vue-property-decorator'
-import Progress from '@/components/h-progress.vue'
+import CProgress from '@/components/c-progress.vue'
+import CSkeleton from '@/components/c-skeleton.vue'
 
 import Resource from './components/Resource.vue'
-import Skeleton from './components/Skeleton.vue'
-
+import Mysql from './components/Mysql.vue'
 import { resourcePlanItemsType } from '@/type/yum.type'
+import { ipStoreModule } from '@/store/modules/ip'
+import { statusStoreModule } from '@/store/modules/status'
+// import axios from 'axios'
 
 @Component({
   components: {
-    Progress,
+    CProgress,
+    CSkeleton,
     Resource,
-    Skeleton
+    Mysql
   }
 })
 export default class Yum extends Vue {
   @Provide('formProvide') resourcePlanItems: Array<resourcePlanItemsType> = [
-    { ip: '', userName: '', passWord: '', showPass: false }
+    { ip: '', userName: '', passWord: '', netWorkCard: '', showPass: false }
   ]
 
   e1 = 1
-  radioGroupYum = 0
   progressShowYum = false
   progressShowSsh = false
-  success = false
+  progressShowMysql = false
+  progressShowMysqlIp = false
+
+  successYum = false
+  successSsh = false
+  successMysql = false
+
   timer = 0
   resourcePlan = true
+  mysqlPlan = true
 
-  startInstall() {
+  // 开始安装yum
+  startInstallYum() {
+    // req
+    const arr: Array<string> = []
+    this.resourcePlanItems.forEach((item, index) => {
+      if (index === 0) {
+        ipStoreModule.setThisIp(item.ip)
+      } else {
+        arr.push(item.ip)
+      }
+    })
+    ipStoreModule.setIpList(arr)
+
+    //
     clearTimeout(this.timer)
-    this.e1 = 3
+    this.e1 = 2
     this.progressShowYum = true
-    // this.timer = setTimeout(() => {
-    //   this.success = true
-    // }, 45000)
+    this.timer = setTimeout(() => {
+      this.successYum = true
+      this.startInstallSsh()
+    }, 1000)
+  }
+
+  // 开始打通ssh
+  startInstallSsh() {
+    this.e1 = 3
+    this.progressShowYum = false
+    this.progressShowSsh = true
+
+    clearTimeout(this.timer)
+    this.timer = setTimeout(() => {
+      this.successSsh = true
+      this.progressShowSsh = false
+      this.e1 = 4
+      this.progressShowMysqlIp = true
+    }, 1000)
+  }
+
+  // mysql开始安装
+  startInstallMysql() {
+    this.e1 = 5
+    this.progressShowMysql = true
+
+    clearTimeout(this.timer)
+    this.timer = setTimeout(() => {
+      this.successMysql = true
+    }, 1000)
+  }
+
+  // finish init
+  finishInit() {
+    // 获取当前状态
+    statusStoreModule.getInit()
   }
 }
 </script>
 <style scoped>
-#YumTitle {
-  width: 900px;
-  margin: 150px auto 0 auto;
-  text-align: center;
-  position: relative;
-  z-index: 10;
-}
 #Yum {
-  width: 900px;
+  width: 1100px;
   margin: 200px auto 0 auto;
   text-align: center;
   position: relative;
@@ -148,5 +201,8 @@ export default class Yum extends Vue {
 }
 .text-suggest {
   font-size: 15px;
+  text-align: left;
+  margin-left: 40px;
+  color: #1976d2;
 }
 </style>
