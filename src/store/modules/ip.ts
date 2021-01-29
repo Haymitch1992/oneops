@@ -8,24 +8,24 @@ import store from '@/store'
   store
 })
 export default class IP extends VuexModule {
-  thisIp = ''
-  ipList = [] as Array<string>
+  public thisIp = ''
+  public ipList = [] as Array<string>
 
   @Mutation
-  SET_THISIP(str: string) {
+  private SET_THISIP(str: string) {
     this.thisIp = str
   }
   @Mutation
-  SET_IPLIST(arr: Array<string>) {
+  private SET_IPLIST(arr: Array<string>) {
     this.ipList = [...arr]
   }
 
   @Action
-  async setThisIp(str: string) {
+  public async setThisIp(str: string) {
     this.context.commit('SET_THISIP', str)
   }
   @Action
-  async setIpList(arr: Array<string>) {
+  public async setIpList(arr: Array<string>) {
     this.context.commit('SET_IPLIST', arr)
   }
 }

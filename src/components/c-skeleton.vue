@@ -10,7 +10,7 @@
           type="button@3"
         ></v-skeleton-loader>
         <v-skeleton-loader
-          v-for="item in 8"
+          v-for="item in 10"
           :key="item"
           v-bind="attrs"
           height="35px"

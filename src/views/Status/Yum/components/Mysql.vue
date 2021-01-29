@@ -20,7 +20,6 @@
 
 <script lang="ts">
 import { Vue, Component } from 'vue-property-decorator'
-// import { noEmpty } from '@/validator/common'
 import { ipStoreModule } from '@/store/modules/ip'
 
 @Component

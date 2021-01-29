@@ -8,7 +8,7 @@
         </v-stepper-step>
         <v-divider></v-divider>
         <v-stepper-step :editable="resourcePlan && progressShowYum" step="2">
-          安装yum
+          安装yum源
         </v-stepper-step>
         <v-divider></v-divider>
         <v-stepper-step :editable="resourcePlan && progressShowSsh" step="3">
@@ -27,7 +27,7 @@
       <v-stepper-items>
         <v-stepper-content class="px-0" step="1">
           <v-card flat>
-            <p class="text-suggest mb-0"><span class="require-span">*</span>将使用本机IP作为安装yum以及应用的IP</p>
+            <p class="text-suggest mb-0"><span class="require-span">*</span>将使用本机IP作为安装yum源以及应用的IP</p>
             <v-card-text class="pb-0 px-0 mt-4">
               <v-form v-model="resourcePlan">
                 <Resource />
@@ -103,7 +103,6 @@ import Mysql from './components/Mysql.vue'
 import { resourcePlanItemsType } from '@/type/yum.type'
 import { ipStoreModule } from '@/store/modules/ip'
 import { statusStoreModule } from '@/store/modules/status'
-// import axios from 'axios'
 
 @Component({
   components: {
@@ -115,7 +114,7 @@ import { statusStoreModule } from '@/store/modules/status'
 })
 export default class Yum extends Vue {
   @Provide('formProvide') resourcePlanItems: Array<resourcePlanItemsType> = [
-    { ip: '', userName: '', passWord: '', netWorkCard: '', showPass: false }
+    { ip: '', hostname: '', user: '', password: '', showPass: false, extra: '', network: '' }
   ]
 
   e1 = 1
@@ -139,7 +138,7 @@ export default class Yum extends Vue {
     this.resourcePlanItems.forEach((item, index) => {
       if (index === 0) {
         ipStoreModule.setThisIp(item.ip)
-      } else {
+      } else if (index > 1) {
         arr.push(item.ip)
       }
     })
@@ -167,7 +166,7 @@ export default class Yum extends Vue {
       this.progressShowSsh = false
       this.e1 = 4
       this.progressShowMysqlIp = true
-    }, 1000)
+    }, 3000)
   }
 
   // mysql开始安装
@@ -178,7 +177,7 @@ export default class Yum extends Vue {
     clearTimeout(this.timer)
     this.timer = setTimeout(() => {
       this.successMysql = true
-    }, 1000)
+    }, 3000)
   }
 
   // finish init
@@ -190,8 +189,8 @@ export default class Yum extends Vue {
 </script>
 <style scoped>
 #Yum {
-  width: 1100px;
-  margin: 200px auto 0 auto;
+  width: 1200px;
+  margin: 180px auto 0 auto;
   text-align: center;
   position: relative;
   z-index: 10;

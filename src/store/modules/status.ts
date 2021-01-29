@@ -9,25 +9,25 @@ import store from '@/store'
   store
 })
 export default class Status extends VuexModule {
-  init = -1 // 初始化是否完成 完成是1 未完成是0
-  level = -1 // 0 未初始化 1 IP 2 yum 3 ssh 4 mysql
-  status = -1 // 0 脚本开始执行 1 脚本执行失败 2 应用安装失败
+  public init = -1 // 初始化是否完成 完成是1 未完成是0
+  public level = -1 // 0 未初始化 1 IP 2 yum 3 ssh 4 mysql
+  public status = -1 // 0 脚本开始执行 1 脚本执行失败 2 应用安装失败
   //
   @Mutation
-  SET_INIT(code: boolean) {
+  private SET_INIT(code: boolean) {
     code ? (this.init = 1) : (this.init = 0)
   }
   @Mutation
-  SET_LEVEL(code: number) {
+  private SET_LEVEL(code: number) {
     this.level = code
   }
   @Mutation
-  SET_STATUS(code: number) {
+  private SET_STATUS(code: number) {
     this.status = code
   }
 
   @Action
-  async getInit() {
+  public async getInit() {
     fetch(`${VUE_APP_BASE_API}/init`).then(async res => {
       if (res.ok) {
         const { code } = await res.json()
@@ -36,7 +36,7 @@ export default class Status extends VuexModule {
     })
   }
   @Action
-  async getLevel() {
+  public async getLevel() {
     fetch(`${VUE_APP_BASE_API}/level`).then(async res => {
       if (res.ok) {
         const { code } = await res.json()
@@ -45,7 +45,7 @@ export default class Status extends VuexModule {
     })
   }
   @Action
-  async getStatus() {
+  public async getStatus() {
     fetch(`${VUE_APP_BASE_API}/status`).then(async res => {
       if (res.ok) {
         const { code } = await res.json()

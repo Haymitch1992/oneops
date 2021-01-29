@@ -1,7 +1,10 @@
 import Vue from 'vue'
+import RequestData from '@/api'
+import Utils from '@/utils'
 
 declare module 'vue/types/vue' {
   interface Vue {
-    $request: any // 全局方法
+    $http: RequestData
+    $utils: Utils
   }
 }

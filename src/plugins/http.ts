@@ -1,10 +1,8 @@
-import axios from 'axios'
-import { VueConstructor } from 'vue/types/umd'
+import { VueConstructor } from 'vue'
+import HttpInit from '../api/httpDecoratorInit'
 
-const http = {
-  install: (Vue: VueConstructor): void => {
-    Vue.prototype.$request = axios
-  }
+const http = (Vue: VueConstructor): void => {
+  Vue.prototype.$http = new HttpInit().httpRequestInit()
 }
 
 export default http

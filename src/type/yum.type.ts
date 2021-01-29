@@ -1,7 +1,9 @@
 export type resourcePlanItemsType = {
   ip: string
-  userName: string
-  passWord: string
+  hostname: string
+  user: string
+  password: string
   showPass: boolean
-  netWorkCard: string
+  extra?: string
+  network?: string
 }
