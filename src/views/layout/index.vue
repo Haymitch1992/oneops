@@ -1,6 +1,6 @@
 <template>
   <v-app id="tct">
-    <v-navigation-drawer width="200px" app color="rgb(0,21,41)" class="mt-14">
+    <v-navigation-drawer width="220px" app color="rgb(0,21,41)" class="mt-14">
       <NavBar />
     </v-navigation-drawer>
     <v-app-bar app height="57" color="rgb(0,21,41)" width="100%" style="left: 0px">
@@ -26,7 +26,7 @@ import TopBar from '@/components/topbar.vue'
     TopBar
   }
 })
-export default class Login extends Vue {
+export default class Layout extends Vue {
   get items(): Array<{ text: string; disabled?: boolean; link?: boolean; to?: string }> {
     return [
       { text: this.$route.matched[0].meta.title, disabled: false },

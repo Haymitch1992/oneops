@@ -1,63 +1,65 @@
 <template>
   <v-row no-gutters class="resourcePlan py-2">
-    <!-- 本机信息 -->
-    <!-- 资源规划 -->
-    <v-col v-for="(item, index) in formProvide" :key="item.id" cols="12" class="d-flex">
+    <!-- 网卡信息 -->
+    <v-col cols="12" class="d-flex">
       <label class="label mr-2">
-        <div v-if="index === 0"><span class="require-span">*</span>本机信息</div>
-        <div v-else-if="index === 1"><span class="require-span">*</span>网卡信息</div>
-        <div v-else-if="index === 2"><span class="require-span">*</span>资源规划</div>
+        <div><span class="require-span">*</span>网卡信息</div>
       </label>
-
       <v-text-field
-        v-model="item.ip"
-        v-if="index !== 1"
-        outlined
-        dense
-        clearable
-        height="34"
-        :label="index === 0 ? '本机IP' : '服务器IP'"
-        :rules="noEmpty(index === 0 ? '本机IP' : '服务器IP')"
-        class="ml-4"
-      ></v-text-field>
-      <v-text-field
-        v-model="item.network"
-        v-if="index === 1"
+        v-model="formProvide.network"
         outlined
         dense
         clearable
         full-width
         height="34"
         label="网卡信息"
-        :rules="noEmpty('网卡信息')"
+        :rules="[...validator.noEmpty('网卡信息')]"
         class="ml-4 flex-grow-0"
       ></v-text-field>
-      <v-spacer style="width:1085px" v-if="index === 1" />
+      <v-spacer style="width:1214px" />
+    </v-col>
+    <!-- 本机信息 -->
+    <!-- 资源规划 -->
+    <v-col v-for="(item, index) in formProvide['items']" :key="item.id" cols="12" class="d-flex">
+      <label class="label mr-2">
+        <div v-if="index === 0"><span class="require-span">*</span>本机信息</div>
+        <div v-else-if="index === 1"><span class="require-span">*</span>资源规划</div>
+      </label>
+
+      <v-text-field
+        v-model="item.ip"
+        outlined
+        dense
+        clearable
+        height="34"
+        :label="index === 0 ? '本机IP' : '服务器IP'"
+        @change="testIp(item.ip)"
+        :rules="[...validator['noEmpty'](index === 0 ? '本机IP' : '服务器IP'), ...validator['realIP'](), ...noRepeat]"
+        class="ml-4"
+      ></v-text-field>
+
       <v-text-field
         v-model="item.hostname"
-        v-if="index !== 1"
         outlined
         dense
         clearable
         height="34"
         :label="'服务器域名'"
-        :rules="noEmpty('服务器域名')"
+        :rules="[...validator.noEmpty('服务器域名')]"
         class="ml-4"
       ></v-text-field>
       <v-text-field
         v-model="item.user"
-        v-if="index !== 1"
         outlined
         dense
         clearable
         height="34"
         label="服务器用户名"
-        :rules="noEmpty('服务器用户名')"
+        :rules="[...validator.noEmpty('服务器用户名')]"
         class="ml-4"
       ></v-text-field>
       <v-text-field
         v-model="item.password"
-        v-if="index !== 1"
         :append-icon="item.showPass ? 'mdi-eye' : 'mdi-eye-off'"
         :type="item.showPass ? 'text' : 'password'"
         @click:append="handleShowPass(index)"
@@ -65,12 +67,11 @@
         dense
         height="34"
         label="服务器密码"
-        :rules="noEmpty('服务器密码')"
+        :rules="[...validator.noEmpty('服务器密码')]"
         class="ml-4"
       ></v-text-field>
       <v-text-field
         v-model="item.extra"
-        v-if="index !== 1"
         outlined
         dense
         height="34"
@@ -81,7 +82,7 @@
 
       <div class="btn-group d-flex justify-space-around mr-6">
         <v-btn
-          v-if="index !== 0 && index !== 1 && index === formProvide.length - 1"
+          v-if="index !== 0 && index !== 1 && index === formProvide['items'].length - 1"
           fab
           dark
           max-width="24"
@@ -93,7 +94,7 @@
           <v-icon dark>mdi-plus</v-icon>
         </v-btn>
         <v-btn
-          v-if="index !== 0 && index !== 1 && index !== 2 && formProvide.length > 4"
+          v-if="index !== 0 && index !== 1 && formProvide['items'].length > 3"
           fab
           dark
           max-width="24"
@@ -112,28 +113,58 @@
 <script lang="ts">
 import { Vue, Inject, Component } from 'vue-property-decorator'
 import { resourcePlanItemsType } from '@/type/yum.type'
-import { noEmpty } from '@/validator/common'
+import Validator from '@/plugins/validator.ts'
 
 @Component
-export default class Resource extends Vue {
-  @Inject() private readonly formProvide!: Array<resourcePlanItemsType>
+@Validator(['noEmpty', 'realIP'])
+export default class CResource extends Vue {
+  @Inject() private readonly formProvide!: { network: string; items: Array<resourcePlanItemsType> }
+
+  private noRepeat: Array<string> = []
+  private get ipList() {
+    return this.formProvide['items'].map(item => {
+      return item.ip
+    })
+  }
+
   plus(n?: number) {
     n = n ? n : 1
     for (let i = 0; i < n; i++) {
-      this.formProvide.push({ ip: '', hostname: '', user: '', password: '', showPass: false, extra: '', network: '' })
+      this.formProvide['items'].push({
+        ip: '',
+        hostname: '',
+        user: '',
+        password: '',
+        showPass: false,
+        extra: ''
+      })
     }
   }
-  noEmpty(str: string) {
-    return noEmpty(str)
-  }
+
   minus(index: number) {
-    this.formProvide.splice(index, 1)
+    this.formProvide['items'].splice(index, 1)
   }
   handleShowPass(index: number) {
-    this.formProvide[index].showPass = !this.formProvide[index].showPass
+    this.formProvide['items'][index].showPass = !this.formProvide['items'][index].showPass
+  }
+
+  // ip不能重复
+  testIp(ip: string) {
+    let n = 0
+    //去重
+    this.ipList.forEach(item => {
+      if (item === ip) {
+        n++
+      }
+    })
+    if (n > 1) {
+      this.noRepeat = ['IP不能重复']
+    } else {
+      this.noRepeat = []
+    }
   }
   created() {
-    this.plus(3)
+    this.plus(2)
   }
 }
 </script>

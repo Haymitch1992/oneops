@@ -1,5 +1,4 @@
 import { Module, VuexModule, Mutation, Action, getModule } from 'vuex-module-decorators'
-import { VUE_APP_BASE_API } from '@/config'
 import store from '@/store'
 
 @Module({
@@ -27,31 +26,16 @@ export default class Status extends VuexModule {
   }
 
   @Action
-  public async getInit() {
-    fetch(`${VUE_APP_BASE_API}/init`).then(async res => {
-      if (res.ok) {
-        const { code } = await res.json()
-        this.context.commit('SET_INIT', code)
-      }
-    })
+  public async setInit(code: boolean) {
+    this.context.commit('SET_INIT', code)
   }
   @Action
-  public async getLevel() {
-    fetch(`${VUE_APP_BASE_API}/level`).then(async res => {
-      if (res.ok) {
-        const { code } = await res.json()
-        this.context.commit('SET_LEVEL', code)
-      }
-    })
+  public async setLevel(code: number) {
+    this.context.commit('SET_LEVEL', code)
   }
   @Action
-  public async getStatus() {
-    fetch(`${VUE_APP_BASE_API}/status`).then(async res => {
-      if (res.ok) {
-        const { code } = await res.json()
-        this.context.commit('SET_STATUS', code)
-      }
-    })
+  public async setStatus(code: number) {
+    this.context.commit('SET_STATUS', code)
   }
 }
 

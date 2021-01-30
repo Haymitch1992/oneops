@@ -6,5 +6,6 @@ declare module 'vue/types/vue' {
   interface Vue {
     $http: RequestData
     $utils: Utils
+    validator: any
   }
 }

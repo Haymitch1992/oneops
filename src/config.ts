@@ -7,6 +7,29 @@
 // VUE_APP_BASE_API = 'http://8.131.231.56:49090'
 // 106
 // VUE_APP_BASE_API = 'http://172.51.216.106:9002'
-export const VUE_APP_BASE_API = 'http://localhost:3001'
+export const VUE_APP_BASE_API = 'http://localhost:3000'
 
-export const PROJECT_TITLE = '非容器化部署平台'
+export const PROJECT_TITLE = '交控科技天枢平台统一运维平台'
+
+export const ROUTER_LIST = [
+  {
+    url: '/cmdtask',
+    name: '容器化部署',
+    childrenList: [
+      {
+        url: '/cmdtask/index',
+        name: 'cmdtask'
+      }
+    ]
+  },
+  {
+    url: '/shell',
+    name: '非容器化部署',
+    childrenList: [
+      {
+        url: '/shell/installApp',
+        name: '安装应用'
+      }
+    ]
+  }
+]

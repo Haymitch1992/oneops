@@ -1,13 +1,12 @@
 <template>
   <div id="skeleton">
-    <!-- <h1 class="skeleton-title mt-12">{{ PROJECT_TITLE }}</h1> -->
     <v-row class="skeleton-container" no-gutters>
       <v-col cols="12">
         <v-skeleton-loader
           v-bind="attrs"
           class="d-flex justify-space-between"
-          width="250px"
-          type="button@3"
+          width="170px"
+          type="button@2"
         ></v-skeleton-loader>
         <v-skeleton-loader
           v-for="item in 10"
@@ -35,22 +34,8 @@ export default class CSkeleton extends Vue {
 }
 </script>
 <style scoped>
-#skeleton {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background-color: rgba(33, 33, 33, 0.3);
-}
-.skeleton-title {
-  font-size: 40px;
-  font-weight: 600;
-  letter-spacing: 10px;
-  text-align: center;
-  color: #0c447b;
-}
 .skeleton-container {
-  width: 1300px;
-  margin: 100px auto 0 auto;
+  width: 1500px;
+  margin: 20px auto 0 auto;
 }
 </style>

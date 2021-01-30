@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <CSkeleton />
-    <v-stepper id="Yum" non-linear v-model="e1">
+  <div id="Yum">
+    <!-- yum -->
+    <v-stepper non-linear v-model="e1">
       <v-stepper-header>
         <v-stepper-step editable step="1">
           资源规划
@@ -30,7 +30,7 @@
             <p class="text-suggest mb-0"><span class="require-span">*</span>将使用本机IP作为安装yum源以及应用的IP</p>
             <v-card-text class="pb-0 px-0 mt-4">
               <v-form v-model="resourcePlan">
-                <Resource />
+                <CResource />
               </v-form>
             </v-card-text>
             <v-card-actions class="pt-0 mr-6">
@@ -69,7 +69,7 @@
           <v-card flat>
             <v-card-text class="pb-0">
               <v-form v-model="mysqlPlan">
-                <Mysql />
+                <CMysql />
               </v-form>
             </v-card-text>
             <v-card-actions>
@@ -95,27 +95,27 @@
 
 <script lang="ts">
 import { Component, Vue, Provide } from 'vue-property-decorator'
-import CProgress from '@/components/c-progress.vue'
-import CSkeleton from '@/components/c-skeleton.vue'
 
-import Resource from './components/Resource.vue'
-import Mysql from './components/Mysql.vue'
-import { resourcePlanItemsType } from '@/type/yum.type'
+import CProgress from '@/components/c-progress.vue'
+import CResource from '@/components/c-resource.vue'
+import CMysql from '@/components/c-mysql.vue'
+
+import { resourcePlanItemsType, resourcePlanParamsType } from '@/type/yum.type'
 import { ipStoreModule } from '@/store/modules/ip'
-import { statusStoreModule } from '@/store/modules/status'
+// import { statusStoreModule } from '@/store/modules/status'
 
 @Component({
   components: {
     CProgress,
-    CSkeleton,
-    Resource,
-    Mysql
+    CResource,
+    CMysql
   }
 })
-export default class Yum extends Vue {
-  @Provide('formProvide') resourcePlanItems: Array<resourcePlanItemsType> = [
-    { ip: '', hostname: '', user: '', password: '', showPass: false, extra: '', network: '' }
-  ]
+export default class Init extends Vue {
+  @Provide('formProvide') resourcePlanProvide: { network: string; items: Array<resourcePlanItemsType> } = {
+    network: '',
+    items: [{ ip: '', hostname: '', user: '', password: '', showPass: false, extra: '' }]
+  }
 
   e1 = 1
   progressShowYum = false
@@ -132,26 +132,40 @@ export default class Yum extends Vue {
   mysqlPlan = true
 
   // 开始安装yum
-  startInstallYum() {
+  private async startInstallYum() {
     // req
     const arr: Array<string> = []
-    this.resourcePlanItems.forEach((item, index) => {
+    this.resourcePlanProvide['items'].forEach((item, index) => {
       if (index === 0) {
         ipStoreModule.setThisIp(item.ip)
-      } else if (index > 1) {
+      } else {
         arr.push(item.ip)
       }
     })
     ipStoreModule.setIpList(arr)
 
-    //
-    clearTimeout(this.timer)
-    this.e1 = 2
-    this.progressShowYum = true
-    this.timer = setTimeout(() => {
-      this.successYum = true
-      this.startInstallSsh()
-    }, 1000)
+    const params: Array<resourcePlanParamsType> = this.resourcePlanProvide['items'].map((item, index) => {
+      return {
+        master: index === 0,
+        network: index === 0 ? this.resourcePlanProvide.network : '',
+        ip: item.ip,
+        hostname: item.hostname,
+        user: item.user,
+        password: item.password,
+        extra: item.extra
+      }
+    })
+
+    const { data } = await this.$http.httpPOST('POST_SETIP', params)
+    console.log(data)
+
+    // clearTimeout(this.timer)
+    // this.e1 = 2
+    // this.progressShowYum = true
+    // this.timer = setTimeout(() => {
+    //   this.successYum = true
+    //   this.startInstallSsh()
+    // }, 1000)
   }
 
   // 开始打通ssh
@@ -183,18 +197,11 @@ export default class Yum extends Vue {
   // finish init
   finishInit() {
     // 获取当前状态
-    statusStoreModule.getInit()
+    // statusStoreModule.setInit()
   }
 }
 </script>
 <style scoped>
-#Yum {
-  width: 1200px;
-  margin: 180px auto 0 auto;
-  text-align: center;
-  position: relative;
-  z-index: 10;
-}
 #Yum >>> .v-icon.v-icon {
   font-size: 16px;
 }

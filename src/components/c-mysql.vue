@@ -23,7 +23,7 @@ import { Vue, Component } from 'vue-property-decorator'
 import { ipStoreModule } from '@/store/modules/ip'
 
 @Component
-export default class Resource extends Vue {
+export default class CMysql extends Vue {
   get ipList() {
     return ipStoreModule.ipList
   }

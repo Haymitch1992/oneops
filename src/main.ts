@@ -5,6 +5,7 @@ import store from './store'
 import vuetify from './plugins/vuetify'
 import http from '@/plugins/http'
 import utils from '@/plugins/utils'
+
 import DevicePixelRatio from '@/utils/windowResize'
 
 Vue.config.productionTip = false

@@ -1,14 +1,12 @@
 {
-    "init": {
-        "code": 0
-    },
-    "level": {
-        "code": 0
-    },
-    "status": {
-        "code": 0
-    },
-    "process": {
-        "success": false
-    }
+    "deployment": [
+        {
+            "id": "status",
+            "data": {
+                "init": false,
+                "level": -1,
+                "status": -1
+            }
+        }
+    ]
 }
