@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 class Validator {
   private obj: any = {}
 
@@ -8,7 +9,7 @@ class Validator {
     this.assginClass()
   }
 
-  public readonly getValidators = (): any => {
+  public readonly getValidators = () => {
     const validatorObj: any = {}
     this.vnames.forEach((vname: string) => {
       if (this.obj[vname]) {
