@@ -42,4 +42,8 @@ export default class NavBar extends Vue {
 #navbar >>> .v-icon.v-icon {
   font-size: 18px;
 }
+#navbar {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 </style>

@@ -15,17 +15,19 @@
         label="网卡信息"
         :rules="[...validator.noEmpty('网卡信息')]"
         class="ml-4 flex-grow-0"
+        style="max-width:168px"
       ></v-text-field>
-      <v-spacer style="width:1214px" />
+      <v-spacer />
     </v-col>
     <!-- 本机信息 -->
     <!-- 资源规划 -->
     <v-col v-for="(item, index) in formProvide['items']" :key="item.id" cols="12" class="d-flex">
+      <!-- label -->
       <label class="label mr-2">
         <div v-if="index === 0"><span class="require-span">*</span>本机信息</div>
         <div v-else-if="index === 1"><span class="require-span">*</span>资源规划</div>
       </label>
-
+      <!-- input -->
       <v-text-field
         v-model="item.ip"
         outlined
@@ -79,7 +81,7 @@
         label="描述说明"
         class="ml-4 mr-2"
       ></v-text-field>
-
+      <!-- label-end -->
       <div class="btn-group d-flex justify-space-around mr-6">
         <v-btn
           v-if="index !== 0 && index !== 1 && index === formProvide['items'].length - 1"

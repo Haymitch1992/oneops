@@ -2,16 +2,17 @@ module.exports = {
   lintOnSave: process.env.NODE_ENV === 'development',
   devServer: {
     port: 8080,
-    open: true
-    // proxy: {
-    //   'api/': {
-    //     target: 'http://192.168.58.120:8080',
-    //     changeOrigin: true,
-    //     pathRewrite: {
-    //       '^api/': '/'
-    //     }
-    //   }
-    // }
+    open: true,
+    // 容器化服务
+    proxy: {
+      '/api': {
+        target: 'http://123.57.222.177:14010',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
   },
   transpileDependencies: ['vuetify', 'vuex-module-decorators'],
   configureWebpack: config => {

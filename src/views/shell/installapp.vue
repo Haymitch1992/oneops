@@ -6,7 +6,6 @@
     </div>
     <!-- init install -->
     <div v-else-if="init === 0" class="yum-component">
-      <!-- 骨架屏 -->
       <CDialog v-if="dialogFlag" v-model="dialogFlag" :width="'1200'" :title="'初始化'">
         <Init />
       </CDialog>

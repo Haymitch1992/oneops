@@ -25,6 +25,7 @@
       </v-stepper-header>
 
       <v-stepper-items>
+        <!-- 资源规划 -->
         <v-stepper-content class="px-0" step="1">
           <v-card flat>
             <p class="text-suggest mb-0"><span class="require-span">*</span>将使用本机IP作为安装yum源以及应用的IP</p>
@@ -35,20 +36,21 @@
             </v-card-text>
             <v-card-actions class="pt-0 mr-6">
               <v-spacer></v-spacer>
-              <v-btn
+              <v-btn text color="primary" @click="startInstallYum">
+                <!-- <v-btn
                 text
                 color="primary"
                 :disabled="
                   !resourcePlan || progressShowYum || progressShowSsh || progressShowMysql || progressShowMysqlIp
                 "
                 @click="startInstallYum"
-              >
+              > -->
                 开始初始化安装
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-stepper-content>
-
+        <!-- 安装yum源 -->
         <v-stepper-content step="2">
           <v-card flat>
             <v-card-text class="my-6">
@@ -56,7 +58,7 @@
             </v-card-text>
           </v-card>
         </v-stepper-content>
-
+        <!-- 打通ssh -->
         <v-stepper-content step="3">
           <v-card flat>
             <v-card-text class="my-6">
@@ -64,7 +66,7 @@
             </v-card-text>
           </v-card>
         </v-stepper-content>
-
+        <!-- 选择安装MySQL的IP -->
         <v-stepper-content step="4">
           <v-card flat>
             <v-card-text class="pb-0">
@@ -80,7 +82,7 @@
             </v-card-actions>
           </v-card>
         </v-stepper-content>
-
+        <!-- 安装MySQL -->
         <v-stepper-content step="5">
           <v-card flat>
             <v-card-text class="my-6">

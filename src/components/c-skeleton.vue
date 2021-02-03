@@ -9,7 +9,7 @@
           type="button@2"
         ></v-skeleton-loader>
         <v-skeleton-loader
-          v-for="item in 10"
+          v-for="item in 7"
           :key="item"
           v-bind="attrs"
           height="35px"
@@ -35,7 +35,7 @@ export default class CSkeleton extends Vue {
 </script>
 <style scoped>
 .skeleton-container {
-  width: 1500px;
+  width: 95%;
   margin: 20px auto 0 auto;
 }
 </style>
