@@ -1,11 +1,11 @@
 <template>
   <div id="InstallApp">
     <!-- ip&app list -->
-    <div v-if="init === 1" class="table-component">
+    <div v-if="init === 1">
       <Table />
     </div>
     <!-- init install -->
-    <div v-else-if="init === 0" class="yum-component">
+    <div v-else-if="init === 0">
       <CDialog v-if="dialogFlag" v-model="dialogFlag" :width="'1200'" :title="'初始化'">
         <Init />
       </CDialog>
