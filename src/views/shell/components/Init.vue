@@ -102,7 +102,8 @@ import CProgress from '@/components/c-progress.vue'
 import CResource from '@/components/c-resource.vue'
 import CMysql from '@/components/c-mysql.vue'
 
-import { resourcePlanItemsType, resourcePlanParamsType } from '@/type/yum.type'
+// import { resourcePlanItemsType, resourcePlanParamsType } from '@/type/yum.type'
+import { resourcePlanItemsType } from '@/type/yum.type'
 import { ipStoreModule } from '@/store/modules/ip'
 // import { statusStoreModule } from '@/store/modules/status'
 
@@ -146,28 +147,30 @@ export default class Init extends Vue {
     })
     ipStoreModule.setIpList(arr)
 
-    const params: Array<resourcePlanParamsType> = this.resourcePlanProvide['items'].map((item, index) => {
-      return {
-        master: index === 0,
-        network: index === 0 ? this.resourcePlanProvide.network : '',
-        ip: item.ip,
-        hostname: item.hostname,
-        user: item.user,
-        password: item.password,
-        extra: item.extra
-      }
-    })
+    // const params: Array<resourcePlanParamsType> = this.resourcePlanProvide['items'].map((item, index) => {
+    //   return {
+    //     master: index === 0,
+    //     network: index === 0 ? this.resourcePlanProvide.network : '',
+    //     ip: item.ip,
+    //     hostname: item.hostname,
+    //     user: item.user,
+    //     password: item.password,
+    //     extra: item.extra
+    //   }
+    // })
 
-    const { data } = await this.$http.httpPOST('POST_SETIP', params)
-    console.log(data)
-
+    // const { success } = await this.$http.httpPOST('POST_SETIP', params)
+    // if (success) {
+    this.e1 = 2
+    this.progressShowYum = true
+    // }
     // clearTimeout(this.timer)
     // this.e1 = 2
     // this.progressShowYum = true
-    // this.timer = setTimeout(() => {
-    //   this.successYum = true
-    //   this.startInstallSsh()
-    // }, 1000)
+    this.timer = setTimeout(() => {
+      this.successYum = true
+      // this.startInstallSsh()
+    }, 5000)
   }
 
   // 开始打通ssh

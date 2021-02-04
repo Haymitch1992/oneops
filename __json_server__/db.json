@@ -6,7 +6,10 @@
                 "init": false,
                 "level": -1,
                 "status": -1
-            }
+            },
+            "code": 200,
+            "message": "",
+            "success": true
         }
     ]
 }

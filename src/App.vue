@@ -1,10 +1,16 @@
 <template>
   <v-app>
     <router-view />
+    <h-message></h-message>
   </v-app>
 </template>
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
-@Component
+import HMessage from './components/h-message/h-messageComponent.vue'
+@Component({
+  components: {
+    HMessage
+  }
+})
 export default class App extends Vue {}
 </script>
